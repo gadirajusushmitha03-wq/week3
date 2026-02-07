@@ -1,0 +1,135 @@
+groups:
+  - name: securecollab-alerts
+    interval: 30s
+    rules:
+      # Chat Service Alerts
+      - alert: HighMessageLatency
+        expr: histogram_quantile(0.95, chat.message.latency) > 5000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High message latency detected"
+          description: "Message latency p95 > 5s on {{ $labels.instance }}"
+
+      - alert: HighToxicityDetectionRate
+        expr: rate(chat.toxicity.detected[5m]) > 0.1
+        for: 10m
+        labels:
+          severity: info
+        annotations:
+          summary: "Elevated toxicity detection rate"
+          description: "{{ $value | humanizePercentage }} of messages flagged as toxic"
+
+      - alert: OfflineMessageBacklog
+        expr: chat.offline.queued > 10000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Large offline message backlog"
+          description: "{{ $value }} messages pending offline delivery"
+
+      # Voice/WebRTC Alerts
+      - alert: HighVoiceCallFailureRate
+        expr: rate(voice.calls.failed[5m]) / (rate(voice.calls.initiated[5m]) + 0.001) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High voice call failure rate"
+          description: "{{ $value | humanizePercentage }} of voice calls failing"
+
+      - alert: ExcessiveActiveCalls
+        expr: voice.calls.active > 1000
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of concurrent voice calls"
+          description: "{{ $value }} concurrent calls, approaching limit"
+
+      # Database Alerts
+      - alert: PostgresConnectionPoolExhausted
+        expr: pg_connections{state="active"} / pg_max_connections > 0.8
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "PostgreSQL connection pool nearly exhausted"
+          description: "{{ $value | humanizePercentage }} of connections in use"
+
+      - alert: PostgresSlowQueries
+        expr: rate(pg_slow_queries[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of slow PostgreSQL queries"
+          description: "{{ $value }} slow queries/sec"
+
+      # Cache Alerts
+      - alert: RedisMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis memory usage critical"
+          description: "{{ $value | humanizePercentage }} memory utilized"
+
+      - alert: RedisEvictions
+        expr: increase(redis_evicted_keys_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis key evictions detected"
+          description: "{{ $value }} keys evicted in last 5 minutes"
+
+      # Message Queue Alerts
+      - alert: KafkaConsumerLag
+        expr: kafka_consumergroup_lag > 100000
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Kafka consumer lag high"
+          description: "Consumer group {{ $labels.consumergroup }} lag: {{ $value }} messages"
+
+      - alert: RabbitMQQueueBacklog
+        expr: rabbitmq_queue_messages_ready > 50000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RabbitMQ queue backlog building up"
+          description: "Queue {{ $labels.queue }} has {{ $value }} ready messages"
+
+      # Service Health Alerts
+      - alert: ServiceDown
+        expr: up{job=~"gateway-service|chat-service|websocket-service"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "Service has been unreachable for 2+ minutes"
+
+      - alert: HighErrorRate
+        expr: rate(spring_http_requests_total{status=~"5.."}[5m]) / rate(spring_http_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High HTTP error rate"
+          description: "{{ $value | humanizePercentage }} of requests returning 5xx errors"
+
+      - alert: GatewayResponseTimeSlow
+        expr: histogram_quantile(0.95, spring_http_requests_seconds_bucket{job="gateway-service"}) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Gateway response time high"
+          description: "Gateway p95 response time > 2s"

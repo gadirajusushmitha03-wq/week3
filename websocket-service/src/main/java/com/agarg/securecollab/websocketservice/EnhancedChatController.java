@@ -19,9 +19,11 @@ public class EnhancedChatController {
     private static final Logger logger = LoggerFactory.getLogger(EnhancedChatController.class);
     
     @Autowired private SimpMessagingTemplate messagingTemplate;
+    @Autowired private PresenceService presenceService;
+    @Autowired private RateLimitService rateLimitService;
     // @Autowired private ToxicityDetectionService toxicityService;
     // @Autowired private OfflineMessageQueueService offlineQueueService;
-    
+
     private final Map<String, String> userConnections = new HashMap<>();
     
     /**
@@ -31,10 +33,10 @@ public class EnhancedChatController {
     public void handleUserConnect(@Payload Map<String, String> payload) {
         String userId = payload.get("userId");
         String sessionId = payload.get("sessionId");
-        
         userConnections.put(userId, sessionId);
+        presenceService.markOnline(userId, sessionId);
         logger.info("User connected: {}", userId);
-        
+
         // Broadcast user online status
         messagingTemplate.convertAndSend("/topic/users/online", 
             Map.of("userId", userId, "status", "online", "timestamp", LocalDateTime.now()));
@@ -46,10 +48,10 @@ public class EnhancedChatController {
     @MessageMapping("/disconnect")
     public void handleUserDisconnect(@Payload Map<String, String> payload) {
         String userId = payload.get("userId");
-        
         userConnections.remove(userId);
+        presenceService.markOffline(userId);
         logger.info("User disconnected: {}", userId);
-        
+
         // Broadcast user offline status
         messagingTemplate.convertAndSend("/topic/users/offline", 
             Map.of("userId", userId, "status", "offline", "timestamp", LocalDateTime.now()));
@@ -63,17 +65,24 @@ public class EnhancedChatController {
     public ChatMessage sendMessage(@Payload ChatMessage message) {
         
         try {
+            // Rate limit per sender
+            if (!rateLimitService.tryConsume(message.getSenderId())) {
+                logger.warn("Rate limit exceeded for user {}", message.getSenderId());
+                message.setStatus("RATE_LIMITED");
+                return message;
+            }
+
             // Add server-side timestamp
             message.setTimestamp(LocalDateTime.now().toString());
             message.setStatus("SENT");
-            
+
             // Log message
             logger.info("Message received from: {} in channel: {}", 
                        message.getSenderId(), message.getChannelId());
-            
+
             // Note: Toxicity detection and encryption should be handled on client-side
             // Server only validates structure and forwards encrypted payloads
-            
+
             return message;
             
         } catch (Exception e) {
@@ -90,13 +99,17 @@ public class EnhancedChatController {
     public void sendDirectMessage(@Payload ChatMessage message) {
         
         try {
+            // Rate limit per sender
+            if (!rateLimitService.tryConsume(message.getSenderId())) {
+                logger.warn("Rate limit exceeded for user {}", message.getSenderId());
+                return;
+            }
+
             message.setTimestamp(LocalDateTime.now().toString());
-            
+
             // Send to specific user's queue
-            String recipientTopic = "/user/" + message.getRecipientId() + "/queue/messages";
-            messagingTemplate.convertAndSendToUser(message.getRecipientId(), 
-                "/queue/messages", message);
-            
+            messagingTemplate.convertAndSendToUser(message.getRecipientId(), "/queue/messages", message);
+
             logger.info("Direct message sent from: {} to: {}", 
                        message.getSenderId(), message.getRecipientId());
             

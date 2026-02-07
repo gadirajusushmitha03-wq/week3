@@ -1,0 +1,176 @@
+{
+  "dashboard": {
+    "title": "SecureCollab Chat Analytics",
+    "timezone": "UTC",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Messages Sent (5m rate)",
+        "targets": [
+          {
+            "expr": "rate(chat.messages.sent[5m])",
+            "legendFormat": "msgs/sec"
+          }
+        ],
+        "type": "graph",
+        "gridPos": { "x": 0, "y": 0, "w": 8, "h": 8 }
+      },
+      {
+        "id": 2,
+        "title": "Message Latency (p95)",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, chat.message.latency)",
+            "legendFormat": "p95 latency (ms)"
+          }
+        ],
+        "type": "graph",
+        "gridPos": { "x": 8, "y": 0, "w": 8, "h": 8 }
+      },
+      {
+        "id": 3,
+        "title": "Toxicity Detection Rate",
+        "targets": [
+          {
+            "expr": "rate(chat.toxicity.detected[5m])",
+            "legendFormat": "toxic msgs/sec"
+          }
+        ],
+        "type": "graph",
+        "gridPos": { "x": 16, "y": 0, "w": 8, "h": 8 }
+      },
+      {
+        "id": 4,
+        "title": "Active Channels",
+        "targets": [
+          {
+            "expr": "chat.channels.active",
+            "legendFormat": "active channels"
+          }
+        ],
+        "type": "stat",
+        "gridPos": { "x": 0, "y": 8, "w": 6, "h": 4 }
+      },
+      {
+        "id": 5,
+        "title": "Offline Messages Queued",
+        "targets": [
+          {
+            "expr": "chat.offline.queued",
+            "legendFormat": "queued messages"
+          }
+        ],
+        "type": "stat",
+        "gridPos": { "x": 6, "y": 8, "w": 6, "h": 4 }
+      },
+      {
+        "id": 6,
+        "title": "Active Voice Calls",
+        "targets": [
+          {
+            "expr": "voice.calls.active",
+            "legendFormat": "active calls"
+          }
+        ],
+        "type": "stat",
+        "gridPos": { "x": 12, "y": 8, "w": 6, "h": 4 }
+      },
+      {
+        "id": 7,
+        "title": "Voice Call Success Rate",
+        "targets": [
+          {
+            "expr": "rate(voice.calls.connected[5m]) / (rate(voice.calls.initiated[5m]) + 0.001)",
+            "legendFormat": "success rate"
+          }
+        ],
+        "type": "gauge",
+        "gridPos": { "x": 18, "y": 8, "w": 6, "h": 4 }
+      },
+      {
+        "id": 8,
+        "title": "HTTP Request Rate by Service",
+        "targets": [
+          {
+            "expr": "rate(spring_http_requests_total[5m])",
+            "legendFormat": "{{ job }} - {{ method }}"
+          }
+        ],
+        "type": "graph",
+        "gridPos": { "x": 0, "y": 12, "w": 12, "h": 8 }
+      },
+      {
+        "id": 9,
+        "title": "HTTP Error Rate by Service",
+        "targets": [
+          {
+            "expr": "rate(spring_http_requests_total{status=~\"5..\"}[5m])",
+            "legendFormat": "{{ job }} - 5xx errors"
+          }
+        ],
+        "type": "graph",
+        "gridPos": { "x": 12, "y": 12, "w": 12, "h": 8 }
+      },
+      {
+        "id": 10,
+        "title": "Kafka Consumer Lag",
+        "targets": [
+          {
+            "expr": "kafka_consumergroup_lag",
+            "legendFormat": "{{ consumergroup }} - {{ topic }}"
+          }
+        ],
+        "type": "graph",
+        "gridPos": { "x": 0, "y": 20, "w": 12, "h": 8 }
+      },
+      {
+        "id": 11,
+        "title": "RabbitMQ Queue Depth",
+        "targets": [
+          {
+            "expr": "rabbitmq_queue_messages_ready",
+            "legendFormat": "{{ queue }}"
+          }
+        ],
+        "type": "graph",
+        "gridPos": { "x": 12, "y": 20, "w": 12, "h": 8 }
+      },
+      {
+        "id": 12,
+        "title": "PostgreSQL Connections",
+        "targets": [
+          {
+            "expr": "pg_connections",
+            "legendFormat": "{{ state }}"
+          }
+        ],
+        "type": "graph",
+        "gridPos": { "x": 0, "y": 28, "w": 12, "h": 8 }
+      },
+      {
+        "id": 13,
+        "title": "Redis Memory Usage",
+        "targets": [
+          {
+            "expr": "redis_memory_used_bytes / redis_memory_max_bytes",
+            "legendFormat": "Memory %"
+          }
+        ],
+        "type": "gauge",
+        "gridPos": { "x": 12, "y": 28, "w": 12, "h": 8 }
+      },
+      {
+        "id": 14,
+        "title": "Service Uptime",
+        "targets": [
+          {
+            "expr": "up{job=~\"gateway-service|chat-service|websocket-service\"}",
+            "legendFormat": "{{ job }}"
+          }
+        ],
+        "type": "table",
+        "gridPos": { "x": 0, "y": 36, "w": 24, "h": 4 }
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: prune-offline-messages
+  namespace: securecollab
+spec:
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: chat-service
+          containers:
+            - name: pruner
+              image: securecollab/chat-service:latest
+              command:
+                - "java"
+                - "-cp"
+                - "@/app/jib-classpath-file"
+                - "com.agarg.securecollab.chatservice.PruneOfflineMessagesJob"
+          restartPolicy: OnFailure
