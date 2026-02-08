@@ -36,6 +36,12 @@ public class KeyBundleEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "public_key")
+    private String publicKey;
+
+    @Column(name = "registered_at")
+    private LocalDateTime registeredAt;
+
     public KeyBundleEntity() {
         this.id = UUID.randomUUID().toString();
         this.createdAt = LocalDateTime.now();
@@ -66,4 +72,12 @@ public class KeyBundleEntity {
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public LocalDateTime getRegisteredAt() {
+        return registeredAt;
+    }
 }

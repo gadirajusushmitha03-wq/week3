@@ -9,6 +9,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import com.agarg.securecollab.chatservice.service.OAuthTokenService;
 
 /**
  * Jira Integration Service - Creates issues, transitions, and links via REST API
@@ -39,7 +40,7 @@ public class JiraIntegrationService {
                                                String summary, String description) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "jira");
+        String accessToken = oauthTokenService.getAccessToken(userId, "jira");
         
         Map<String, Object> issue = new LinkedHashMap<>();
         
@@ -81,7 +82,7 @@ public class JiraIntegrationService {
   public CompletableFuture<Void> transitionIssue(String userId, String issueKey, String targetStatus) {
     return CompletableFuture.runAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "jira");
+        String accessToken = oauthTokenService.getAccessToken(userId, "jira");
         
         // Get available transitions
         String transitionsUrl = jiraBaseUrl + "/issue/" + issueKey + "/transitions";
@@ -117,7 +118,7 @@ public class JiraIntegrationService {
   public CompletableFuture<Void> linkIssues(String userId, String issueKey1, String issueKey2, String linkType) {
     return CompletableFuture.runAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "jira");
+        String accessToken = oauthTokenService.getAccessToken(userId, "jira");
         
         Map<String, Object> linkPayload = new LinkedHashMap<>();
         linkPayload.put("type", Map.of("name", linkType));
@@ -144,7 +145,7 @@ public class JiraIntegrationService {
   public CompletableFuture<Void> addComment(String userId, String issueKey, String comment) {
     return CompletableFuture.runAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "jira");
+        String accessToken = oauthTokenService.getAccessToken(userId, "jira");
         
         Map<String, Object> commentPayload = Map.of("body", 
           Map.of("version", 1, "type", "doc", 
@@ -172,7 +173,7 @@ public class JiraIntegrationService {
   public CompletableFuture<List<Map<String, Object>>> searchIssues(String userId, String jql) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "jira");
+        String accessToken = oauthTokenService.getAccessToken(userId, "jira");
         
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);

@@ -2,6 +2,7 @@ package com.agarg.securecollab.chatservice.controller;
 
 import com.agarg.securecollab.chatservice.model.*;
 import com.agarg.securecollab.chatservice.service.*;
+import com.agarg.securecollab.chatservice.messaging.EventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class ChatApiController {
     @Autowired private ReminderApprovalService reminderApprovalService;
     @Autowired private FileSharingService fileSharingService;
     @Autowired private VoiceCallService voiceCallService;
-    @Autowired private com.agarg.securecollab.chatservice.messaging.EventPublisher eventPublisher;
+    @Autowired private EventPublisher eventPublisher;
     @Autowired private com.agarg.securecollab.chatservice.repository.MessageRepository messageRepository;
     
     /**

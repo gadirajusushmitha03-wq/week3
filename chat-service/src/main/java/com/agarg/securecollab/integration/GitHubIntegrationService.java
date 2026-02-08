@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import com.agarg.securecollab.chatservice.service.OAuthTokenService;
 
 /**
  * GitHub Integration Service - Creates issues, PRs, adds labels via REST API v3
@@ -38,7 +39,7 @@ public class GitHubIntegrationService {
                                                String title, String body, List<String> labels) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "github");
+        String accessToken = oauthTokenService.getAccessToken(userId, "github");
         
         Map<String, Object> issuePayload = new LinkedHashMap<>();
         issuePayload.put("title", title);
@@ -74,7 +75,7 @@ public class GitHubIntegrationService {
                                                      String title, String body, String head, String base) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "github");
+        String accessToken = oauthTokenService.getAccessToken(userId, "github");
         
         Map<String, Object> prPayload = new LinkedHashMap<>();
         prPayload.put("title", title);
@@ -108,7 +109,7 @@ public class GitHubIntegrationService {
   public CompletableFuture<Void> addLabel(String userId, String owner, String repo, int issueNumber, String label) {
     return CompletableFuture.runAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "github");
+        String accessToken = oauthTokenService.getAccessToken(userId, "github");
         
         Map<String, Object> labelPayload = Map.of("labels", Arrays.asList(label));
         String payload = objectMapper.writeValueAsString(labelPayload);
@@ -133,7 +134,7 @@ public class GitHubIntegrationService {
   public CompletableFuture<Void> addComment(String userId, String owner, String repo, int issueNumber, String comment) {
     return CompletableFuture.runAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "github");
+        String accessToken = oauthTokenService.getAccessToken(userId, "github");
         
         Map<String, Object> commentPayload = Map.of("body", comment);
         String payload = objectMapper.writeValueAsString(commentPayload);
@@ -160,7 +161,7 @@ public class GitHubIntegrationService {
                                                   String workflowId, String ref, Map<String, String> inputs) {
     return CompletableFuture.runAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "github");
+        String accessToken = oauthTokenService.getAccessToken(userId, "github");
         
         Map<String, Object> dispatchPayload = new LinkedHashMap<>();
         dispatchPayload.put("ref", ref);
@@ -191,7 +192,7 @@ public class GitHubIntegrationService {
   public CompletableFuture<List<Map<String, Object>>> search(String userId, String query) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "github");
+        String accessToken = oauthTokenService.getAccessToken(userId, "github");
         
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "token " + accessToken);

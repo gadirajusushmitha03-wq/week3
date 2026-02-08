@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import com.agarg.securecollab.chatservice.service.OAuthTokenService;
 
 /**
  * CI/CD Integration Service - Triggers builds, deployments via Jenkins, GitHub Actions, GitLab CI
@@ -40,7 +41,7 @@ public class CICDIntegrationService {
   public CompletableFuture<String> triggerJenkinsJob(String userId, String jobName, Map<String, String> params) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "jenkins");
+        String accessToken = oauthTokenService.getAccessToken(userId, "jenkins");
         
         // Build query parameters
         StringBuilder queryParams = new StringBuilder();
@@ -74,7 +75,7 @@ public class CICDIntegrationService {
   public CompletableFuture<Map<String, Object>> getJenkinsBuildStatus(String userId, String jobName, String buildNumber) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "jenkins");
+        String accessToken = oauthTokenService.getAccessToken(userId, "jenkins");
         
         String url = jenkinsBaseUrl + "/job/" + jobName + "/" + buildNumber + "/api/json";
         
@@ -107,7 +108,7 @@ public class CICDIntegrationService {
                                                          Map<String, String> variables) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "gitlab");
+        String accessToken = oauthTokenService.getAccessToken(userId, "gitlab");
         
         Map<String, Object> pipelinePayload = new LinkedHashMap<>();
         pipelinePayload.put("ref", ref);
@@ -141,7 +142,7 @@ public class CICDIntegrationService {
   public CompletableFuture<Map<String, Object>> getGitLabPipelineStatus(String userId, String projectId, String pipelineId) {
     return CompletableFuture.supplyAsync(() -> {
       try {
-        String accessToken = oauthTokenService.getValidToken(userId, "gitlab");
+        String accessToken = oauthTokenService.getAccessToken(userId, "gitlab");
         
         HttpHeaders headers = new HttpHeaders();
         headers.set("PRIVATE-TOKEN", accessToken);

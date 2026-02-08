@@ -50,4 +50,21 @@ public class MessageEntity {
     public void setStatus(String status) { this.status = status; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public String getId() {
+        return messageId;
+    }
+
+    public String getFromUserId() {
+        return senderId;
+    }
+
+    public String getToUserId() {
+        return channelId;
+    }
+
+    public String getIv() {
+        // Assuming 'iv' is some kind of derived or static value for now
+        return "initializationVector"; // Placeholder, replace with actual logic if needed
+    }
 }

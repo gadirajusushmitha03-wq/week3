@@ -2,6 +2,7 @@ package com.agarg.securecollab.chatservice.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "channels")
@@ -25,15 +26,20 @@ public class ChannelEntity {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @ElementCollection
+    @Column(name = "members")
+    private List<String> members;
+
     public ChannelEntity() {}
 
-    public ChannelEntity(String channelId, String name, String description, String type, String ownerId, LocalDateTime createdAt) {
+    public ChannelEntity(String channelId, String name, String description, String type, String ownerId, LocalDateTime createdAt, List<String> members) {
         this.channelId = channelId;
         this.name = name;
         this.description = description;
         this.type = type;
         this.ownerId = ownerId;
         this.createdAt = createdAt;
+        this.members = members;
     }
 
     public String getChannelId() { return channelId; }
@@ -48,4 +54,7 @@ public class ChannelEntity {
     public void setOwnerId(String ownerId) { this.ownerId = ownerId; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public List<String> getMembers() { return members; }
+    public void setMembers(List<String> members) { this.members = members; }
+    public String getId() { return channelId; }
 }

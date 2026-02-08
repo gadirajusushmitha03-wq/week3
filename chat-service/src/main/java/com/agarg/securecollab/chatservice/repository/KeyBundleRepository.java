@@ -10,4 +10,5 @@ import java.util.List;
 public interface KeyBundleRepository extends JpaRepository<KeyBundleEntity, String> {
     List<KeyBundleEntity> findByUserId(String userId);
     KeyBundleEntity findByUserIdAndDeviceId(String userId, String deviceId);
+    void deleteAllByUserId(String userId);
 }

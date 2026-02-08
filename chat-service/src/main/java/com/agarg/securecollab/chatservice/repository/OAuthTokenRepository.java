@@ -9,4 +9,5 @@ import java.util.List;
 public interface OAuthTokenRepository extends JpaRepository<OAuthTokenEntity, Long> {
     OAuthTokenEntity findByUserIdAndProvider(String userId, String provider);
     List<OAuthTokenEntity> findByUserId(String userId);
+    void deleteAllByUserId(String userId);
 }

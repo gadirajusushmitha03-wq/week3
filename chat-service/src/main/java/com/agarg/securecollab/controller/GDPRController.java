@@ -2,7 +2,12 @@ package com.agarg.securecollab.controller;
 
 import com.agarg.securecollab.entity.*;
 import com.agarg.securecollab.repository.*;
-import com.agarg.securecollab.service.EncryptionService;
+import com.agarg.securecollab.chatservice.service.EncryptionService;
+import com.agarg.securecollab.chatservice.entity.MessageEntity;
+import com.agarg.securecollab.chatservice.entity.ChannelEntity;
+import com.agarg.securecollab.chatservice.entity.KeyBundleEntity;
+import com.agarg.securecollab.chatservice.entity.OfflineMessageEntity;
+import com.agarg.securecollab.chatservice.entity.OAuthTokenEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -69,14 +74,14 @@ public class GDPRController {
       // 6. Audit log (GDPR retention: 90 days for legal compliance)
       logGDPRDeletion(userId, deletionTime, "FULL_DELETION");
 
-      return ResponseEntity.ok(Map.of(
+      return ResponseEntity.ok(Map.<String, Object>of(
         "message", "User account permanently deleted",
         "timestamp", deletionTime,
         "userId", userId
       ));
 
     } catch (Exception e) {
-      return ResponseEntity.status(500).body(Map.of("error", "Deletion failed: " + e.getMessage()));
+      return ResponseEntity.status(500).body(Map.<String, Object>of("error", "Deletion failed: " + e.getMessage()));
     }
   }
 
@@ -101,14 +106,16 @@ public class GDPRController {
       // 1. Export messages (encrypted ciphertext only)
       List<MessageEntity> messages = messageRepository.findByFromUserIdOrToUserId(userId, userId);
       List<Map<String, Object>> messageExport = messages.stream()
-        .map(msg -> Map.of(
-          "id", msg.getId(),
-          "from", msg.getFromUserId(),
-          "to", msg.getToUserId(),
-          "encryptedContent", msg.getEncryptedContent(),
-          "iv", msg.getIv(),
-          "createdAt", msg.getCreatedAt()
-        ))
+        .map(msg -> {
+          Map<String, Object> messageMap = new LinkedHashMap<>();
+          messageMap.put("id", msg.getId());
+          messageMap.put("from", msg.getFromUserId());
+          messageMap.put("to", msg.getToUserId());
+          messageMap.put("encryptedContent", msg.getEncryptedContent());
+          messageMap.put("iv", msg.getIv());
+          messageMap.put("createdAt", msg.getCreatedAt());
+          return messageMap;
+        })
         .collect(Collectors.toList());
       export.put("messages", messageExport);
 
@@ -116,23 +123,27 @@ public class GDPRController {
       List<ChannelEntity> channels = channelRepository.findAll();
       List<Map<String, Object>> channelExport = channels.stream()
         .filter(ch -> ch.getMembers().contains(userId))
-        .map(ch -> Map.of(
-          "id", ch.getId(),
-          "name", ch.getName(),
-          "description", ch.getDescription(),
-          "joinedAt", ch.getCreatedAt()
-        ))
+        .map(ch -> {
+          Map<String, Object> channelMap = new LinkedHashMap<>();
+          channelMap.put("id", ch.getId());
+          channelMap.put("name", ch.getName());
+          channelMap.put("description", ch.getDescription());
+          channelMap.put("joinedAt", ch.getCreatedAt());
+          return channelMap;
+        })
         .collect(Collectors.toList());
       export.put("channels", channelExport);
 
       // 3. Export public key bundles (for recovery)
       List<KeyBundleEntity> keyBundles = keyBundleRepository.findByUserId(userId);
       List<Map<String, Object>> keyExport = keyBundles.stream()
-        .map(kb -> Map.of(
-          "deviceId", kb.getDeviceId(),
-          "publicKey", kb.getPublicKey(),
-          "registeredAt", kb.getRegisteredAt()
-        ))
+        .map(kb -> {
+          Map<String, Object> keyMap = new LinkedHashMap<>();
+          keyMap.put("deviceId", kb.getDeviceId());
+          keyMap.put("publicKey", kb.getPublicKey());
+          keyMap.put("registeredAt", kb.getRegisteredAt());
+          return keyMap;
+        })
         .collect(Collectors.toList());
       export.put("keyBundles", keyExport);
 

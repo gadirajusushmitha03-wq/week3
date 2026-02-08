@@ -95,4 +95,15 @@ public class OAuthTokenService {
     public List<OAuthTokenEntity> getUserTokens(String userId) {
         return repository.findByUserId(userId);
     }
+
+    // Added getValidToken method to retrieve a valid token for a user and provider.
+    @Transactional
+    public OAuthTokenEntity getValidToken(String userId, String provider) {
+        OAuthTokenEntity token = repository.findByUserIdAndProvider(userId, provider);
+        if (token == null || token.getExpiresAt().isBefore(LocalDateTime.now())) {
+            logger.warn("No valid token found for user={} and provider={}", userId, provider);
+            return null;
+        }
+        return token;
+    }
 }

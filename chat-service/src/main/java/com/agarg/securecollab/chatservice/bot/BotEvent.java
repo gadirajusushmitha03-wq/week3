@@ -13,7 +13,7 @@ public class BotEvent {
     private String channelId;
     private Map<String, Object> payload;
     private LocalDateTime timestamp;
-    
+
     public enum BotEventType {
         MESSAGE_CREATED,
         MESSAGE_EDITED,
@@ -26,7 +26,7 @@ public class BotEvent {
         REMINDER_TRIGGERED,
         APPROVAL_REQUESTED
     }
-    
+
     public BotEvent(BotEventType eventType, String source, String channelId, Map<String, Object> payload) {
         this.eventId = UUID.randomUUID().toString();
         this.eventType = eventType;
@@ -35,7 +35,7 @@ public class BotEvent {
         this.payload = payload != null ? payload : new HashMap<>();
         this.timestamp = LocalDateTime.now();
     }
-    
+
     public String getEventId() { return eventId; }
     public BotEventType getEventType() { return eventType; }
     public String getSource() { return source; }

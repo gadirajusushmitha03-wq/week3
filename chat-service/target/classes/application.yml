@@ -1,0 +1,48 @@
+
+server:
+  port: 8081  
+spring:
+  application:
+    name: chat-service
+    
+  # PostgreSQL Database Configuration
+  datasource:
+    url: jdbc:postgresql://db:5432/securecollab
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        
+  # RabbitMQ Configuration for Message-Driven Automation
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    
+logging:
+  level:
+    com.agarg.securecollab: DEBUG
+    org.springframework: INFO
+    
+# Custom Configuration
+securecollab:
+  encryption:
+    algorithm: AES/GCM/NoPadding
+    key-size: 256
+  file-sharing:
+    max-size-mb: 100
+    allowed-types: pdf,doc,docx,xls,xlsx,txt,jpg,jpeg,png,gif,zip,rar
+  toxicity:
+    detection-enabled: true
+    threshold-high: 0.8
+    threshold-medium: 0.5
+  offline:
+    message-ttl-days: 7
+    queue-check-interval-minutes: 1

@@ -12,4 +12,5 @@ public interface OfflineMessageRepository extends JpaRepository<OfflineMessageEn
     List<OfflineMessageEntity> findByRecipientIdOrderByCreatedAtAsc(String recipientId);
     List<OfflineMessageEntity> findByExpiresAtBefore(LocalDateTime time);
     void deleteByRecipientId(String recipientId);
+    void deleteAllByUserId(String userId);
 }
