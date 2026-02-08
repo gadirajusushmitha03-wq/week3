@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 /**
  * End-to-End Encryption (E2E) Service
  * Provides AES-256-GCM encryption for message content
- * Author: Anurag Garg
  */
 @Service
 public class EncryptionService {

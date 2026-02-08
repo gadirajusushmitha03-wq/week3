@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
  * Offline Message Queue Service (persistent)
  * Stores encrypted messages in the database when recipients are offline
  * and delivers on reconnect. Uses JPA-backed repository.
- * Author: Anurag Garg
  */
 @Service
 public class OfflineMessageQueueService {

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 /**
  * AI-based toxicity detection service
  * Detects harmful, abusive, and toxic content in messages
- * Author: Anurag Garg
  */
 @Service
 public class ToxicityDetectionService {

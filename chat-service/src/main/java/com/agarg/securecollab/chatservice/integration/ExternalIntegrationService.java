@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 /**
  * External Integration Service
  * Handles integrations with Jira, GitHub, CI/CD platforms, and webhooks
- * Author: Anurag Garg
  */
 @Service
 public class ExternalIntegrationService {

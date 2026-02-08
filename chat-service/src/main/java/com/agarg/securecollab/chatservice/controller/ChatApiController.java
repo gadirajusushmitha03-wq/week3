@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * REST API Controller for Chat Operations
- * Author: Anurag Garg
  */
 @RestController
 @RequestMapping("/api/chat")

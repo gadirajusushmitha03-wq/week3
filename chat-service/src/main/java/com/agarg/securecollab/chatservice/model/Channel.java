@@ -6,7 +6,6 @@ import java.util.*;
 /**
  * Chat Channel model
  * Supports organized conversations with members and settings
- * Author: Anurag Garg
  */
 public class Channel {
     private String id;

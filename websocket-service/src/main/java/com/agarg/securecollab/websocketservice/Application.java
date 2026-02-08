@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * websocket-service
- * Author: Anurag Garg
  */
 @SpringBootApplication
 public class Application {

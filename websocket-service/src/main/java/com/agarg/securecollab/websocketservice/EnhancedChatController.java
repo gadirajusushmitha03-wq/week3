@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Enhanced WebSocket Controller with message routing, toxicity detection, and offline delivery
- * Author: Anurag Garg
  */
 @Controller
 public class EnhancedChatController {

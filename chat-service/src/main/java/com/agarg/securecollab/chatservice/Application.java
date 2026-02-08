@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * chat-service
- * Author: Anurag Garg
  */
 @SpringBootApplication
 public class Application {
