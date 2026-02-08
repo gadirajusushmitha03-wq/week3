@@ -1,6 +1,6 @@
 package com.agarg.securecollab.chatservice.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
