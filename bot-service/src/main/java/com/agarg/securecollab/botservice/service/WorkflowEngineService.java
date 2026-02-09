@@ -130,7 +130,7 @@ public class WorkflowEngineService {
     private void handleReminder(JsonNode action, String userId, String channelId) {
         try {
             String reminderText = action.get("text").asText();
-            long delaySeconds = action.get("delaySeconds", 3600).asLong();
+            long delaySeconds = action.get("delaySeconds").asLong(3600);
             
             kafkaTemplate.send("reminders", userId, 
                 String.format("{\"userId\":\"%s\",\"channelId\":\"%s\",\"text\":\"%s\",\"delaySeconds\":%d}",

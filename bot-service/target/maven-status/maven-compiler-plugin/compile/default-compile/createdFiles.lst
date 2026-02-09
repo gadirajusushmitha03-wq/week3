@@ -1,0 +1,9 @@
+com\agarg\securecollab\botservice\controller\WorkflowController.class
+com\agarg\securecollab\botservice\service\WorkflowEngineService.class
+com\agarg\securecollab\botservice\repository\BotWorkflowRepository.class
+com\agarg\securecollab\botservice\service\ReminderService.class
+com\agarg\securecollab\botservice\service\JiraIntegrationService.class
+com\agarg\securecollab\botservice\Application.class
+com\agarg\securecollab\botservice\service\GitHubIntegrationService.class
+com\agarg\securecollab\botservice\service\ApprovalService.class
+com\agarg\securecollab\botservice\model\BotWorkflow.class
