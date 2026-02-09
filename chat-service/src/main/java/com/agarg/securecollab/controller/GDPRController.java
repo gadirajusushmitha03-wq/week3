@@ -49,8 +49,8 @@ public class GDPRController {
       // 1. Delete all messages sent by user
       messageRepository.deleteAllByFromUserId(userId);
 
-      // 2. Delete all offline messages for user
-      offlineMessageRepository.deleteAllByUserId(userId);
+      // 2. Delete all offline messages for user (use recipientId)
+      offlineMessageRepository.deleteByRecipientId(userId);
 
       // 3. Delete all key bundles (device keys)
       keyBundleRepository.deleteAllByUserId(userId);
