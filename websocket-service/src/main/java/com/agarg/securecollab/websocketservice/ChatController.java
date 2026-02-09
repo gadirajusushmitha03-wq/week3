@@ -1,10 +1,10 @@
-
 package com.agarg.securecollab.websocketservice;
 
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.stereotype.Controller;
 
-@Controller
+// DISABLED: Using EnhancedChatController instead
+// @Controller
 public class ChatController {
 
     @MessageMapping("/chat.send")
