@@ -1,3 +1,1 @@
-package com.agarg.securecollab.websocketservice;
-
-// DISABLED: Using EnhancedChatController instead - this class is kept but not used
+// This file is intentionally empty - all chat functionality moved to EnhancedChatController
