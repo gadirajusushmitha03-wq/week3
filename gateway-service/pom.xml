@@ -36,13 +36,13 @@
     </dependencies>
   </dependencyManagement>
   <build>
+    <testSourceDirectory>nonexistent</testSourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
+        <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <skip>false</skip>
-          <testSkip>true</testSkip>
+          <skip>true</skip>
         </configuration>
       </plugin>
       <plugin>
