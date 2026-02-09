@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * gateway-service
- * Author: Anurag Garg
  */
 @SpringBootApplication
 public class Application {

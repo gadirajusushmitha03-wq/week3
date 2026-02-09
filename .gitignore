@@ -1,0 +1,7 @@
+# Test directories - never commit
+*/src/test/
+*/target/
+.DS_Store
+*.log
+.idea/
+*.iml

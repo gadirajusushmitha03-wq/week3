@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 /**
  * File Sharing Service
  * Handles encrypted file uploads, downloads, and sharing
- * Author: Anurag Garg
  */
 @Service
 public class FileSharingService {

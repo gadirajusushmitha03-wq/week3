@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Reminders and Approvals Service
  * Handles reminders and approval workflows in chat
- * Author: Anurag Garg
  */
 @Service
 public class ReminderApprovalService {

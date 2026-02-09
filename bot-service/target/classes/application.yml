@@ -1,0 +1,57 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: bot-service
+  
+  datasource:
+    url: jdbc:postgresql://db:5432/securecollab
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+  
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:kafka:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP:kafka:9092}
+      group-id: bot-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+logging:
+  level:
+    com.agarg.securecollab: DEBUG
+    org.springframework: INFO
+
+# Integration Credentials
+integrations:
+  jira:
+    url: ${JIRA_URL:https://jira.example.com}
+    username: ${JIRA_USERNAME}
+    api-token: ${JIRA_API_TOKEN}
+  
+  github:
+    token: ${GITHUB_TOKEN}
+    org: ${GITHUB_ORG}
+  
+  slack:
+    webhook-url: ${SLACK_WEBHOOK_URL}

@@ -1,0 +1,10 @@
+com\agarg\securecollab\websocketservice\EnhancedChatController$ChatMessage.class
+com\agarg\securecollab\websocketservice\EnhancedChatController$TypingIndicator.class
+com\agarg\securecollab\websocketservice\WebRTCSignalingService$PeerConnection.class
+com\agarg\securecollab\websocketservice\Application.class
+com\agarg\securecollab\websocketservice\RateLimitService.class
+com\agarg\securecollab\websocketservice\PresenceService.class
+com\agarg\securecollab\websocketservice\EnhancedChatController.class
+com\agarg\securecollab\websocketservice\EnhancedChatController$MessageReaction.class
+com\agarg\securecollab\websocketservice\WebSocketConfig.class
+com\agarg\securecollab\websocketservice\WebRTCSignalingService.class

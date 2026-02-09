@@ -5,7 +5,6 @@ import java.util.*;
 
 /**
  * Message domain model
- * Author: Anurag Garg
  */
 public class Message {
     private String id;

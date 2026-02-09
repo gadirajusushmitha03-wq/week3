@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Voice Call Service
  * Handles real-time voice and video calling functionality
- * Author: Anurag Garg
  */
 @Service
 public class VoiceCallService {
