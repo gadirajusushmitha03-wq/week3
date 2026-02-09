@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
     // Added methods for GDPR operations
-    List<MessageEntity> findByFromUserIdOrToUserId(String fromUserId, String toUserId);
-    void deleteAllByFromUserId(String userId);
-    long countByFromUserIdOrToUserId(String fromUserId, String toUserId);
+    List<MessageEntity> findBySenderId(String senderId);
+    void deleteAllBySenderId(String senderId);
+    long countBySenderId(String senderId);
 }
