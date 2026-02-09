@@ -1,0 +1,24 @@
+
+server:
+  port: 8082  
+spring:
+  application:
+    name: websocket-service
+    
+  # RabbitMQ Configuration for Message Broker
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    
+logging:
+  level:
+    com.agarg.securecollab: DEBUG
+    org.springframework: INFO
+
+# WebSocket Configuration
+websocket:
+  max-text-message-size: 8192000
+  max-binary-message-size: 8192000
+  idle-timeout: 3600000
