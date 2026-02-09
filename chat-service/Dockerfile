@@ -7,7 +7,7 @@ COPY pom.xml .
 RUN mvn dependency:resolve
 COPY . .
 RUN rm -rf src/test
-RUN mvn clean package -DskipTests -Dmaven.test.skip=true -e
+RUN mvn clean package -DskipTests -Dmaven.test.skip=true -Dmaven.test.compile.skip=true
 
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
