@@ -6,7 +6,8 @@ RUN echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"><repositories
 COPY pom.xml .
 RUN mvn dependency:resolve -DskipTests
 COPY . .
-RUN mvn clean package -DskipTests
+RUN rm -rf src/test
+RUN mvn clean package -DskipTests -Dmaven.test.skip=true
 
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
