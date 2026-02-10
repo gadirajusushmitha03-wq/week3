@@ -26,17 +26,54 @@ sleep 120
 docker-compose ps
 ```
 
-### Step 5: Verify All Services Running
+### Step 5: Check Service Status Before Health Checks
 ```bash
-docker-compose logs --tail=20
+# First, make sure all containers are UP
+docker-compose ps
+
+# If any are not running, check logs
+docker-compose logs
+
+# If services failed, rebuild and restart
+docker-compose down
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+### Step 6: Verify All Services Running
+```bash
+# Check final status - should show all services as UP
+docker-compose ps
+
+# View recent logs for any errors
+docker-compose logs --tail=50
 ```
 
 ---
 
 ## ✅ Verification Commands
 
+### ⚠️ IMPORTANT: Wait for Full Startup
+Services need time to initialize. After `docker-compose up -d`:
+- **3-5 minutes**: Database initialization
+- **5-8 minutes**: All services fully ready
+- **First 2 minutes**: Some 404s are normal (still starting)
+
 ### Health Check All Services
 ```bash
+# STEP 1: Verify all containers are running
+docker-compose ps
+
+# Expected output should show all services with status "Up"
+# If any show "Exit" or "Exited", services need debugging
+
+# STEP 2: Give them more time if they just started (wait 1-2 minutes)
+sleep 120
+
+# STEP 3: Check logs for startup errors
+docker-compose logs --tail=100
+
+# STEP 4: Now try health checks
 # Gateway Service (Port 8080)
 curl http://localhost:8080/actuator/health
 
@@ -52,9 +89,8 @@ docker-compose exec postgres pg_isready -U postgres
 # Redis (Port 6379)
 docker-compose exec redis redis-cli PING
 
-# Kafka (Port 9092)
-docker-compose exec kafka /opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092
-# Alternative: docker-compose exec kafka nc -zv localhost 9092
+# Kafka (Port 9092) - Simple connectivity test
+docker-compose exec kafka nc -zv localhost 9092
 
 # RabbitMQ (Port 5672)
 docker-compose exec rabbitmq rabbitmq-diagnostics -q ping
@@ -254,7 +290,52 @@ curl 'http://localhost:9090/api/v1/query?query=up'
 
 ## 🔧 Troubleshooting
 
-### Services Not Starting
+### Services Returning 404 Errors
+```bash
+# This means the service is running but the endpoint path is wrong
+# First check if services are actually UP
+docker-compose ps
+
+# Look for issues in logs
+docker-compose logs chat-service
+docker-compose logs websocket-service
+docker-compose logs gateway-service
+
+# Common reasons:
+# 1. Application didn't start correctly - check Spring Boot logs
+# 2. Actuator endpoints not configured
+# 3. Service still initializing - wait 30 more seconds
+
+# Try these alternative health endpoints
+curl http://localhost:8080/health
+curl http://localhost:8081/health
+curl http://localhost:8082/health
+
+# Or check if services are just slow to start
+sleep 60
+docker-compose logs --tail=50
+```
+
+### PostgreSQL Service Not Running
+```bash
+# Check PostgreSQL status
+docker-compose ps postgres
+
+# Check PostgreSQL logs
+docker-compose logs postgres
+
+# If it's not running, restart all services
+docker-compose restart
+
+# If still failing, rebuild
+docker-compose down
+docker-compose build --no-cache
+docker-compose up -d
+
+# Wait longer (5 minutes) for database to initialize
+sleep 300
+docker-compose ps
+```
 ```bash
 # Check logs
 docker-compose logs
@@ -293,11 +374,11 @@ docker-compose exec postgres psql -U postgres -d securecollab -c "SELECT 1"
 # Check Kafka logs
 docker-compose logs kafka
 
-# List topics
-docker-compose exec kafka /opt/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
-
-# Simple connectivity test
+# Simple connectivity test (Port is open and responsive)
 docker-compose exec kafka nc -zv localhost 9092
+
+# Alternative: Check if Kafka container is running
+docker-compose ps kafka
 ```
 
 ### Redis Issues
