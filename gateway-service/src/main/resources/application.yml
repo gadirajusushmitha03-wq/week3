@@ -5,6 +5,7 @@ server:
 spring:
   application:
     name: gateway-service
+  web-application-type: reactive
 
   cloud:
     gateway:

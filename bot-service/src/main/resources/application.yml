@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: bot-service
+  web-application-type: reactive
   
   datasource:
     url: jdbc:postgresql://db:5432/securecollab
