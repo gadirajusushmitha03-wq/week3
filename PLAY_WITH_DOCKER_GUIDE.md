@@ -53,7 +53,8 @@ docker-compose exec postgres pg_isready -U postgres
 docker-compose exec redis redis-cli PING
 
 # Kafka (Port 9092)
-docker-compose exec kafka kafka-broker-api-versions.sh --bootstrap-server localhost:9092
+docker-compose exec kafka /opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092
+# Alternative: docker-compose exec kafka nc -zv localhost 9092
 
 # RabbitMQ (Port 5672)
 docker-compose exec rabbitmq rabbitmq-diagnostics -q ping
@@ -293,7 +294,10 @@ docker-compose exec postgres psql -U postgres -d securecollab -c "SELECT 1"
 docker-compose logs kafka
 
 # List topics
-docker-compose exec kafka kafka-topics.sh --list --bootstrap-server localhost:9092
+docker-compose exec kafka /opt/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+
+# Simple connectivity test
+docker-compose exec kafka nc -zv localhost 9092
 ```
 
 ### Redis Issues
