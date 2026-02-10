@@ -10,4 +10,6 @@ import java.util.List;
 public interface MessageRepository extends JpaRepository<MessageEntity, String> {
     List<MessageEntity> findByChannelIdOrderByCreatedAtAsc(String channelId);
     void deleteAllBySenderId(String senderId);
+    List<MessageEntity> findBySenderId(String senderId);
+    long countBySenderId(String senderId);
 }

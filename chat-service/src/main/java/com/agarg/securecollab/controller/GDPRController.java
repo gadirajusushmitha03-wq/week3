@@ -104,15 +104,14 @@ public class GDPRController {
       export.put("userId", userId);
 
       // 1. Export messages (encrypted ciphertext only)
-      List<MessageEntity> messages = messageRepository.findByFromUserIdOrToUserId(userId, userId);
+      List<MessageEntity> messages = messageRepository.findBySenderId(userId);
       List<Map<String, Object>> messageExport = messages.stream()
         .map(msg -> {
           Map<String, Object> messageMap = new LinkedHashMap<>();
-          messageMap.put("id", msg.getId());
-          messageMap.put("from", msg.getFromUserId());
-          messageMap.put("to", msg.getToUserId());
+          messageMap.put("id", msg.getMessageId());
+          messageMap.put("from", msg.getSenderId());
+          messageMap.put("channelId", msg.getChannelId());
           messageMap.put("encryptedContent", msg.getEncryptedContent());
-          messageMap.put("iv", msg.getIv());
           messageMap.put("createdAt", msg.getCreatedAt());
           return messageMap;
         })
@@ -225,7 +224,7 @@ public class GDPRController {
     String userId = auth.getName();
 
     try {
-      long messageCount = messageRepository.countByFromUserIdOrToUserId(userId, userId);
+      long messageCount = messageRepository.countBySenderId(userId);
       long channelCount = channelRepository.findAll().stream()
         .filter(ch -> ch.getMembers().contains(userId))
         .count();
