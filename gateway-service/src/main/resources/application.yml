@@ -11,13 +11,13 @@ spring:
     gateway:
       routes:
         - id: chat-service
-          uri: http://chat:8081
+          uri: http://ip172-18-0-15-d65f9q291nsg00e23itg-8081.direct.labs.play-with-docker.com
           predicates:
             - Path=/api/chat/**
           filters:
             - StripPrefix=1
         - id: websocket-service
-          uri: http://websocket:8082
+          uri: http://ip172-18-0-15-d65f9q291nsg00e23itg-8082.direct.labs.play-with-docker.com
           predicates:
             - Path=/ws/**
           filters:
@@ -28,6 +28,14 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: http://auth-server/.well-known/jwks.json
+
+# Frontend Configuration
+frontend:
+  url: http://ip172-18-0-15-d65f9q291nsg00e23itg-3000.direct.labs.play-with-docker.com
+  cors:
+    allowed-origins: http://ip172-18-0-15-d65f9q291nsg00e23itg-3000.direct.labs.play-with-docker.com
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: Content-Type,Authorization
 
 logging:
   level:

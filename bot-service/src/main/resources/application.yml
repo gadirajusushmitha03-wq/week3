@@ -7,7 +7,7 @@ spring:
   web-application-type: reactive
   
   datasource:
-    url: jdbc:postgresql://db:5432/securecollab
+    url: jdbc:postgresql://ip172-18-0-15-d65f9q291nsg00e23itg-5432.direct.labs.play-with-docker.com:5432/securecollab
     username: ${DB_USER:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
@@ -20,23 +20,28 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   
   rabbitmq:
-    host: ${RABBITMQ_HOST:rabbitmq}
-    port: ${RABBITMQ_PORT:5672}
+    host: ${RABBITMQ_HOST:ip172-18-0-15-d65f9q291nsg00e23itg-5671.direct.labs.play-with-docker.com}
+    port: ${RABBITMQ_PORT:5671}
     username: ${RABBITMQ_USER:guest}
     password: ${RABBITMQ_PASSWORD:guest}
   
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP:kafka:9092}
+    bootstrap-servers: ip172-18-0-15-d65f9q291nsg00e23itg-9092.direct.labs.play-with-docker.com:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      bootstrap-servers: ${KAFKA_BOOTSTRAP:kafka:9092}
+      bootstrap-servers: ${KAFKA_BOOTSTRAP:ip172-18-0-15-d65f9q291nsg00e23itg-9092.direct.labs.play-with-docker.com:9092}
       group-id: bot-service-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
+
+# Zookeeper Configuration
+zookeeper:
+  url: ip172-18-0-15-d65f9q291nsg00e23itg-2888.direct.labs.play-with-docker.com:2888
+  client-port: 2181
 
 logging:
   level:

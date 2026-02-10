@@ -4,10 +4,11 @@ server:
 spring:
   application:
     name: chat-service
+  web-application-type: reactive
     
   # PostgreSQL Database Configuration
   datasource:
-    url: jdbc:postgresql://db:5432/securecollab
+    url: jdbc:postgresql://ip172-18-0-15-d65f9q291nsg00e23itg-5432.direct.labs.play-with-docker.com:5432/securecollab
     username: ${DB_USER:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
@@ -21,8 +22,8 @@ spring:
         
   # RabbitMQ Configuration for Message-Driven Automation
   rabbitmq:
-    host: ${RABBITMQ_HOST:rabbitmq}
-    port: ${RABBITMQ_PORT:5672}
+    host: ${RABBITMQ_HOST:ip172-18-0-15-d65f9q291nsg00e23itg-5671.direct.labs.play-with-docker.com}
+    port: ${RABBITMQ_PORT:5671}
     username: ${RABBITMQ_USER:guest}
     password: ${RABBITMQ_PASSWORD:guest}
     
